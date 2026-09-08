@@ -1,4 +1,48 @@
+body {
+  margin: 0;
+  background: #f6f7f9;
+  color: #16181d;
+}
+
 .App {
   font-family: sans-serif;
   text-align: center;
+}
+
+.app-switch {
+  display: flex;
+  gap: 4px;
+  padding: 8px 20px;
+  border-bottom: 1px solid #e2e5ec;
+  background: #fff;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.app-switch button {
+  font: inherit;
+  font-size: 14px;
+  border: none;
+  background: transparent;
+  color: #626878;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.app-switch button:hover {
+  background: #f0f2f6;
+}
+
+.app-switch button.on {
+  color: #16181d;
+  font-weight: 600;
+  background: #eef1f6;
+}
+
+@media (prefers-color-scheme: dark) {
+  body { background: #12141a; color: #e8eaf0; }
+  .app-switch { background: #171a20; border-bottom-color: #2c313c; }
+  .app-switch button { color: #9aa2b4; }
+  .app-switch button:hover { background: #1e222a; }
+  .app-switch button.on { color: #e8eaf0; background: #262b35; }
 }

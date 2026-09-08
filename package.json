@@ -1,29 +1,32 @@
 {
-  "name": "react-typescript",
+  "name": "receipts-to-concur",
   "version": "1.0.0",
-  "description": "React and TypeScript example starter project",
-  "keywords": [
-    "typescript",
-    "react",
-    "starter"
-  ],
+  "private": true,
+  "description": "Pull receipt photos out of Google Photos, read them, and reconcile them against an SAP Concur statement",
   "main": "src/index.tsx",
+  "proxy": "http://localhost:8787",
   "dependencies": {
     "loader-utils": "3.2.1",
+    "lucide-react": "1.7.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-scripts": "5.0.1",
-    "lucide-react": "1.7.0"
+    "react-scripts": "5.0.1"
   },
   "devDependencies": {
     "@types/react": "18.2.38",
     "@types/react-dom": "18.2.15",
-    "typescript": "4.4.4"
+    "concurrently": "^9.1.2",
+    "typescript": "^5.7.3"
   },
   "scripts": {
+    "setup": "npm install && npm --prefix server install",
+    "dev": "concurrently -n server,web -c blue,green \"npm run server\" \"npm start\"",
+    "server": "npm --prefix server run dev",
+    "server:test": "npm --prefix server test",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
+    "typecheck": "tsc -p tsconfig.json --noEmit && npm --prefix server run typecheck",
     "eject": "react-scripts eject"
   },
   "browserslist": [

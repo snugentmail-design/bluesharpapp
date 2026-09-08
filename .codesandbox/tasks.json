@@ -1,1 +1,22 @@
-{"setupTasks":[{"name":"Install Dependencies","command":"yarn install"}],"tasks":{"start":{"name":"start","command":"yarn start","runAtStart":true,"preview":{"port":3000}},"build":{"name":"build","command":"yarn build","runAtStart":false},"test":{"name":"test","command":"yarn test","runAtStart":false},"eject":{"name":"eject","command":"yarn eject","runAtStart":false}}}
+{
+  "setupTasks": [
+    { "name": "Install dependencies", "command": "npm run setup" }
+  ],
+  "tasks": {
+    "dev": {
+      "name": "Run the app and its server",
+      "command": "npm run dev",
+      "runAtStart": true,
+      "preview": { "port": 3000 }
+    },
+    "server": {
+      "name": "Receipt server only",
+      "command": "npm run server",
+      "runAtStart": false,
+      "preview": { "port": 8787 }
+    },
+    "build": { "name": "build", "command": "npm run build", "runAtStart": false },
+    "test": { "name": "server tests", "command": "npm run server:test", "runAtStart": false },
+    "typecheck": { "name": "typecheck", "command": "npm run typecheck", "runAtStart": false }
+  }
+}
