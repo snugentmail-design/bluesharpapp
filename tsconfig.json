@@ -3,12 +3,23 @@
         "./src/**/*"
     ],
     "compilerOptions": {
-        "strict": true,
-        "esModuleInterop": true,
+        "target": "es2018",
         "lib": [
             "dom",
-            "es2015"
+            "dom.iterable",
+            "es2018"
         ],
-        "jsx": "react-jsx"
+        "module": "esnext",
+        "moduleResolution": "node",
+        "jsx": "react-jsx",
+        "strict": true,
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "allowJs": true,
+        "noEmit": true
     }
 }

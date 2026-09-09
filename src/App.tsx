@@ -13,7 +13,14 @@ const NOTES = ["C", "C#", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B"];
 const SHAPES = ["E", "A", "D", "G", "C"];
 const CAPO_POSITIONS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-const SHAPE_TO_SEMITONES = {
+interface Song {
+  name: string;
+  capo: number;
+  shape: string;
+  isMinor: boolean;
+}
+
+const SHAPE_TO_SEMITONES: Record<string, number> = {
   C: 0,
   D: 2,
   E: 4,
@@ -21,7 +28,7 @@ const SHAPE_TO_SEMITONES = {
   A: 9,
 };
 
-function getHarpKey(songKey, position) {
+function getHarpKey(songKey: string, position: number): string {
   const songIdx = NOTES.indexOf(songKey);
   if (position === 1) return songKey;
   if (position === 2) return NOTES[(songIdx + 5) % 12];
@@ -37,7 +44,7 @@ export default function App() {
 
   // For setlist
   const [setlistText, setSetlistText] = useState("");
-  const [setlist, setSetlist] = useState([]);
+  const [setlist, setSetlist] = useState<Song[]>([]);
   const [currentSongIndex, setCurrentSongIndex] = useState(0);
   const [currentCapo, setCurrentCapo] = useState(0);
   const [currentShape, setCurrentShape] = useState("E");
@@ -63,7 +70,7 @@ export default function App() {
       .map((line) => line.trim())
       .filter((line) => line.length > 0);
     // Parse lines like "SongName [Capo] Shape m"
-    const parsed = lines.map((line) => {
+    const parsed: Song[] = lines.map((line) => {
       // Example line: "Crossroads [2] E m" or "Sweet Home [0] A"
       const match = line.match(/^(.+?)(?:\s*\[(\d)\])?\s+([EADGC])\s*(m)?$/i);
       if (match) {
@@ -142,9 +149,10 @@ export default function App() {
                 src="https://i.postimg.cc/mrfsRnwB/robbie.jpg"
                 alt="Robbie Bluesman"
                 className="w-16 h-16 md:w-24 md:h-24 rounded-full border-2 md:border-4 border-orange-600 object-cover shadow-2xl shadow-orange-900/40 bg-zinc-800"
-                onError={(e) => {
-                  e.target.onerror = null;
-                  e.target.src =
+                onError={(event) => {
+                  const image = event.currentTarget;
+                  image.onerror = null;
+                  image.src =
                     "https://ui-avatars.com/api/?name=Robbie+Bluesman&background=ea580c&color=fff&size=256";
                 }}
               />
