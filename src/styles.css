@@ -1,3 +1,54 @@
+:root {
+  color-scheme: dark;
+}
+
+html,
+body {
+  margin: 0;
+  background: #0c0f15;
+  color: #eef2f8;
+  font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+
+.app-shell {
+  min-height: 100vh;
+}
+
+.tool-switch {
+  display: flex;
+  gap: 8px;
+  padding: 10px 16px 0;
+  background: #0c0f15;
+}
+
+.tool-switch button {
+  font: inherit;
+  color: #94a1b8;
+  background: #161b25;
+  border: 1px solid #2b3444;
+  border-radius: 12px;
+  padding: 10px 16px;
+  min-height: 42px;
+  cursor: pointer;
+}
+
+.tool-switch button.active {
+  color: #f6a723;
+  border-color: #f6a723;
+}
+
+@media print {
+  html,
+  body {
+    background: #fff;
+    color: #000;
+  }
+
+  .tool-switch {
+    display: none;
+  }
+}
+
 .App {
   font-family: sans-serif;
   text-align: center;
