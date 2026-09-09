@@ -79,11 +79,12 @@ npm run build    # production build
 `.github/workflows/deploy.yml` builds the app, runs the tests, and publishes it
 to GitHub Pages on every push to `main` or to the Jam Fiddle branch.
 
-The workflow turns Pages on itself the first time it runs, through the
-`enablement` input on `actions/configure-pages`, so the repository needs no
-manual setup. If your organisation policy blocks that, switch it on by hand
-instead under **Settings → Pages → Build and deployment → Source: GitHub
-Actions**.
+It needs Pages switched on once by hand: **Settings → Pages → Build and
+deployment → Source: GitHub Actions**. Until that is done the deploy fails at
+the `configure-pages` step saying Pages is not enabled. The action can create
+the site itself through its `enablement` input, but the workflow token is not
+allowed to, so the setting has to be made by an account with admin rights on
+the repository.
 
 The site lands at `https://<owner>.github.io/bluesharpapp/`. Assets are built
 with relative paths (`"homepage": "."` in `package.json`), so the same build
