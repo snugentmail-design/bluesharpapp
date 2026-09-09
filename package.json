@@ -1,7 +1,8 @@
 {
   "name": "react-typescript",
   "version": "1.0.0",
-  "description": "React and TypeScript example starter project",
+  "description": "Jam Fiddle and the harmonica gig tool",
+  "homepage": ".",
   "keywords": [
     "typescript",
     "react",

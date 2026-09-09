@@ -73,3 +73,29 @@ npm start        # development server on http://localhost:3000
 npm test         # music theory, part generation and chord detection tests
 npm run build    # production build
 ```
+
+## Putting it on the web
+
+`.github/workflows/deploy.yml` builds the app, runs the tests, and publishes it
+to GitHub Pages on every push to `main` or to the Jam Fiddle branch.
+
+It needs one setting turned on by hand, once: **Settings → Pages → Build and
+deployment → Source: GitHub Actions**. Until that is set, the deploy job fails
+with a message saying Pages is not enabled.
+
+The site lands at `https://<owner>.github.io/bluesharpapp/`. Assets are built
+with relative paths (`"homepage": "."` in `package.json`), so the same build
+works from a subdirectory, from the domain root, or opened through a local
+static server.
+
+Hosting matters for the microphone. Browsers hand a page the microphone only in
+a secure context, which means HTTPS or `localhost`. Pages is served over HTTPS,
+so the published site can listen; a build served from a bare `http://192.168.x.x`
+address on the local network cannot.
+
+The app ships a web manifest and an icon, so adding it to a phone's home screen
+opens it without browser chrome. That is the way to use it on a music stand.
+
+Note that no lockfile is committed, matching how the repo was set up, so CI
+installs with `npm install` rather than `npm ci`. Direct dependencies are pinned
+to exact versions in `package.json`; transitive ones can drift between builds.
