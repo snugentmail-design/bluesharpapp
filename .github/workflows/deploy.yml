@@ -1,7 +1,12 @@
 name: Deploy to GitHub Pages
 
-# Runs on the default branch, and on the Jam Fiddle branch so the app can be
-# tried on a phone before the pull request is merged.
+# Publishes the built app to the gh-pages branch, which GitHub serves at
+# https://<owner>.github.io/bluesharpapp/.
+#
+# This deliberately does not use actions/deploy-pages. That path needs the
+# repository's Pages source set to "GitHub Actions", and the workflow token is
+# not allowed to set it. Pushing a gh-pages branch enables Pages on its own and
+# needs no repository settings at all.
 on:
   push:
     branches:
@@ -10,17 +15,16 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
-# Let a running deploy finish rather than cancelling it midway.
+# Two branches can publish here, so let a running deploy finish first: the
+# last push to land is the one that ends up live.
 concurrency:
   group: pages
   cancel-in-progress: false
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -42,21 +46,28 @@ jobs:
         env:
           CI: false # warnings should not fail the build
 
-      # No enablement: true here. The workflow token cannot create the Pages
-      # site ("Resource not accessible by integration"), so Pages has to be
-      # switched on once by hand under Settings > Pages.
-      - uses: actions/configure-pages@v5
+      - name: Publish to gh-pages
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          # .nojekyll stops GitHub skipping files whose names start with _.
+          touch build/.nojekyll
 
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: build
+          git clone --depth 1 --branch gh-pages \
+            "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" /tmp/gh-pages
 
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
+          # Replace the published files, keeping the branch's history.
+          find /tmp/gh-pages -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
+          cp -r build/. /tmp/gh-pages/
+
+          cd /tmp/gh-pages
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Build output is unchanged; nothing to publish."
+          else
+            git commit -m "Deploy ${GITHUB_SHA:0:7} from ${GITHUB_REF_NAME}"
+            git push origin gh-pages
+          fi

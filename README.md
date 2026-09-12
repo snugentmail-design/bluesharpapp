@@ -76,6 +76,47 @@ npm run build    # production build
 
 ## Putting it on the web
 
+The app is published at
+**https://snugentmail-design.github.io/bluesharpapp/**
+
+`.github/workflows/deploy.yml` builds the app, runs the tests, and pushes the
+result to the `gh-pages` branch on every push to `main` or to the Jam Fiddle
+branch. GitHub serves that branch as the site.
+
+It deliberately avoids `actions/deploy-pages`. That route needs the
+repository's Pages source set to "GitHub Actions", and the workflow token is
+not permitted to set it, so it cannot be automated. Pushing a `gh-pages`
+branch enables Pages by itself and needs no repository settings, which is why
+it is used here. Both branches publish to the same place, so the last push to
+land is the one that goes live.
+
+Assets are built with relative paths (`"homepage": "."` in `package.json`), so
+the same build works from the `/bluesharpapp/` subdirectory, from a domain
+root, or from a local static server.
+
+Hosting matters for the microphone. Browsers hand a page the microphone only in
+a secure context, which means HTTPS or `localhost`. The published site is
+HTTPS, so it can listen; a build served from a bare `http://192.168.x.x`
+address on the local network cannot.
+
+The app ships a web manifest and an icon, so adding it to a phone's home screen
+opens it without browser chrome. That is the way to use it on a music stand.
+
+Note that no lockfile is committed, matching how the repo was set up, so CI
+installs with `npm install` rather than `npm ci`. Direct dependencies are pinned
+to exact versions in `package.json`; transitive ones can drift between builds.
+
+## Running it
+
+```
+npm install
+npm start        # development server on http://localhost:3000
+npm test         # music theory, part generation and chord detection tests
+npm run build    # production build
+```
+
+## Putting it on the web
+
 `.github/workflows/deploy.yml` builds the app, runs the tests, and publishes it
 to GitHub Pages on every push to `main` or to the Jam Fiddle branch.
 
